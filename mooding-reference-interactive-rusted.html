@@ -1,623 +1,645 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title></title>
-    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <style type="text/css">
-      body {
-        background-color: #000;
-        color: #fff;
-        font-family: 'Courier New', monospace;
-        font-size: 14px;
-        touch-action: manipulation;
-        touch-action: none;
-        -ms-content-zooming: none;
-        -ms-touch-action: none;
-        zoom: reset !important;
-        zoom: 1 !important
-      }
+	<head>
+		<title></title>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<style type="text/css">
+			body {
+				background-color: #000;
+				color: #fff;
+				font-family: 'Courier New', monospace;
+				font-size: 14px;
+				touch-action: manipulation;
+			}
 
-      h1 {
-        text-align: center;
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
+			h1 {
+				text-align: center;
+				font-size: 24px;
+				margin-bottom: 20px;
+			}
 
-      .mooding-toolbox {
-        background-color: #333;
-        color: #fff;
-        width: 30%;
-        padding: 10px;
-        float: left;
-        border-radius: 10px;
-        user-select: none;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none
-      }
+			.mooding-toolbox {
+				background-color: #333;
+				color: #fff;
+				width: 45%;
+				padding: 10px;
+				float: left;
+				border-radius: 10px;
+				user-select: none;
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none
+			}
 
-      .mooding-toolbox-category {
-        margin-bottom: 10px
-      }
+			.mooding-toolbox-category {
+				margin-bottom: 10px
+			}
 
-      .mooding-toolbox-category>.mooding-toolbox-title {
-        font-weight: 700
-      }
+			.mooding-toolbox-category>.mooding-toolbox-title {
+				font-weight: 700
+			}
 
-      .code-block {
-        font-size: 70%;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 5px;
-        margin-left: -3px;
-        margin-bottom: 5px;
-        cursor: pointer
-      }
+			.code-block {
+				font-size: 70%;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				padding: 5px;
+				margin-left: -3px;
+				margin-bottom: 5px;
+				display: inline-block;
+				cursor: pointer white-space: pre-wrap;
+			}
 
-      .drag-container {
-        min-height: 50px;
-        padding: 10px;
-        border: 2px dashed #aaa;
-        border-radius: 10px;
-        float: left;
-        margin-top: -10px;
-        background-color: var(--drag-container-background-color)
-      }
+			.drag-container {
+				overflow-x: scroll;
+				width: 80%;
+				min-height: 50px;
+				padding: 10px;
+				border: 2px dashed #aaa;
+				border-radius: 10px;
+				float: left;
+				margin-top: -10px;
+				background-color: var(--drag-container-background-color)
+			}
 
-      #canva {
-        min-height: 0;
-        height: calc(100% - 40px);
-        width: 65%;
-        float: right;
-        padding: 10px;
-        border: 2px solid #aaa;
-        border-radius: 10px;
-        user-select: none;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none
-      }
+			#canva {
+				overflow-y: scroll;
+				min-height: 0;
+				height: calc(100% - 40px);
+				width: 65%;
+				float: right;
+				padding: 10px;
+				border: 2px solid #aaa;
+				border-radius: 10px;
+				user-select: none;
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none
+			}
 
-      .block {
-        background-color: #ccc;
-        border: 1px solid #999;
-        border-radius: 4px;
-        padding: 10px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        position: relative
-      }
+			.block {
+				background-color: #ccc;
+				border: 1px solid #999;
+				border-radius: 4px;
+				padding: 10px;
+				margin-bottom: 10px;
+				cursor: pointer;
+				position: relative
+			}
 
-      .block_highlight {
-        background-color: grey;
-        border: 1px solid #999;
-        border-radius: 4px;
-        padding: 10px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        position: relative;
-        font-weight: 700;
-        font-size: 25px
-      }
+			.block_highlight {
+				background-color: grey;
+				border: 1px solid #999;
+				border-radius: 4px;
+				padding: 10px;
+				margin-bottom: 10px;
+				cursor: pointer;
+				position: relative;
+				font-weight: 700;
+				font-size: 25px
+			}
 
-      .undo-button {
-        margin-right: 150px;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #333;
-        color: #fff;
-        font-family: 'Courier New', monospace;
-        font-size: 12px;
-        padding: 6px 10px;
-        border-radius: 4px;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
-        z-index: 9999
-      }
+			.undo-button {
+				margin-right: 150px;
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				background-color: #333;
+				color: #fff;
+				font-family: 'Courier New', monospace;
+				font-size: 12px;
+				padding: 6px 10px;
+				border-radius: 4px;
+				border: none;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+				z-index: 9999
+			}
 
-      .create-button {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #333;
-        color: #fff;
-        font-family: 'Courier New', monospace;
-        font-size: 12px;
-        padding: 6px 10px;
-        border-radius: 4px;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
-        z-index: 9999
-      }
+			.create-button {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				background-color: #333;
+				color: #fff;
+				font-family: 'Courier New', monospace;
+				font-size: 12px;
+				padding: 6px 10px;
+				border-radius: 4px;
+				border: none;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+				z-index: 9999
+			}
 
-      .create-button:hover {
-        background-color: #000;
-        cursor: pointer
-      }
+			.create-button:hover {
+				background-color: #000;
+				cursor: pointer
+			}
 
-      .text-input {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: none;
-        width: 80%;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px
-      }
+			.text-input {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				display: none;
+				width: 80%;
+				padding: 5px;
+				border: 1px solid #ccc;
+				border-radius: 4px
+			}
 
-      .block.show-input .text-input {
-        display: block
-      }
+			.block.show-input .text-input {
+				display: block
+			}
 
-      .disabled {
-        opacity: .5;
-        pointer-events: none
-      }
+			.disabled {
+				opacity: .5;
+				pointer-events: none
+			}
 
-      .btn-delete {
-        margin-bottom: 35px;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #6b0000;
-        color: #fff;
-        font-family: 'Courier New', monospace;
-        font-size: 12px;
-        padding: 6px 10px;
-        border-radius: 4px;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
-        z-index: 9999;
-        display: none
-      }
+			.btn-delete {
+				margin-bottom: 35px;
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				background-color: #6b0000;
+				color: #fff;
+				font-family: 'Courier New', monospace;
+				font-size: 12px;
+				padding: 6px 10px;
+				border-radius: 4px;
+				border: none;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+				z-index: 9999;
+				display: none
+			}
 
-      .btn-delete:hover {
-        background-color: maroon;
-        cursor: pointer
-      }
+			.btn-delete:hover {
+				background-color: maroon;
+				cursor: pointer
+			}
 
-      .block.selected {
-        background-color: red
-      }
+			.block.selected {
+				background-color: red
+			}
 
-      .bubble {
-        position: fixed;
-        background-color: #363636;
-        color: #ccc;
-        border: 1px solid #eee;
-        border-radius: 4px;
-        padding: 5px;
-        font-size: 12px;
-        z-index: 9999
-      }
+			.bubble {
+				position: fixed;
+				background-color: #363636;
+				color: #ccc;
+				border: 1px solid #eee;
+				border-radius: 4px;
+				padding: 5px;
+				font-size: 12px;
+				z-index: 9999
+			}
 
-      .text-area {
-        width: 95%;
-        height: 90px;
-        padding: 10px;
-        padding: 30px;
-        border: 2px solid #aaa;
-        border-radius: 4px;
-        background-color: #262626;
-        color: #ccc;
-        font-family: 'Courier New', monospace;
-        font-size: 14px;
-        white-space: pre-wrap
-      }
-    </style>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const undoButton = document.getElementById('undo');
-        undoButton.addEventListener('click', undoAction);
-        const createButton = document.getElementById('create');
-        const deleteButton = document.getElementById('delete');
-        const actionHistory = [];
-        const apiUrl = 'https://raw.githubusercontent.com/Reik-RtS/rwdupdater/master/mooding.json';
-        const dragContainer = document.getElementsByClassName('drag-container')[0];
-        const canva = document.getElementById('canva');
-        const textArea = document.getElementById('text-area');
-        let selectedBlocks = [];
-        // Cargar datos desde la API web
-        fetch(apiUrl).then(response => response.json()).then(jsonData => {
-          // Crear bloques de c贸digo a partir de los datos JSON
-          jsonData.forEach(function(item) {
-            const codeBlock = document.createElement('li');
-            codeBlock.className = 'code-block';
-            codeBlock.draggable = true;
-            codeBlock.textContent = item.Code;
-            codeBlock.addEventListener('dragstart', function(e) {
-              e.dataTransfer.setData('text/plain', item.Code);
-            });
-            codeBlock.addEventListener('contextmenu', function(e) {
-              e.preventDefault();
-              const bubble = createBubble(item);
-              const mouseX = e.clientX;
-              const mouseY = e.clientY;
-              bubble.style.left = `${mouseX}px`;
-              bubble.style.top = `${mouseY}px`;
-              document.body.appendChild(bubble);
-            });
-            // Validar si el bloque contiene el texto "#===="
-            if (item.Code.includes('#====')) {
-              codeBlock.classList.add('disabled');
-              codeBlock.textContent = item.Description;
-              dragContainer.style.backgroundColor = 'gray';
-            }
-            dragContainer.appendChild(codeBlock);
-          });
-          // Calcular y establecer la altura del elemento "canva"
-          const dragContainerHeight = dragContainer.offsetHeight;
-          canva.style.height = dragContainerHeight + 'px';
-          init(); // Llamar a la funci贸n init
-        }).catch(error => console.error('Error al cargar los datos:', error));
-        // Ajustar la altura del canva al cargar el JSON
-        window.addEventListener('load', function() {
-          const dragContainerHeight = dragContainer.offsetHeight;
-          canva.style.height = `calc(100% - ${dragContainerHeight + 20}px)`;
-        });
-        // Permitir soltar bloques de c贸digo en el canvas
-        canva.addEventListener('dragover', function(e) {
-          e.preventDefault();
-          this.classList.add('drag-over');
-        });
-        canva.addEventListener('dragleave', function() {
-          this.classList.remove('drag-over');
-        });
-        canva.addEventListener('drop', function(e) {
-          e.preventDefault();
-          this.classList.remove('drag-over');
-          const code = e.dataTransfer.getData('text/plain');
-          const block = createBlock(code);
-          this.appendChild(block);
-          checkBlockForText(block); // Comprobar si el bloque tiene ":"
-        });
-        // Crear burbuja
-        function createBubble(item) {
-          const bubble = document.createElement('div');
-          bubble.className = 'bubble';
-          let textContent = '';
-          if (item.Example && item.Example.trim() !== '--- Select here and press bar space ---') {
-            textContent = `${item.Example}`;
-          }
-          if (item.Added && item.Added.trim() !== '') {
-            textContent += ` ▼ Added: ${item.Added}`;
-          }
-          if (item.ValueType && item.ValueType.trim() !== '') {
-            if (textContent !== '') {
-              textContent += ' ';
-            }
-            textContent += ` ▼ ValueType: ${item.ValueType}`;
-          }
-          bubble.textContent = textContent;
-          // Ocultar la burbuja
-          setTimeout(() => {
-            bubble.remove();
-          }, 5000);
-          return bubble;
-        }
-        // Crear un elemento de bloque con conectores
-        let blockIdCounter = 0;
+			.text-area {
+				width: 95%;
+				height: 90px;
+				padding: 10px;
+				padding: 30px;
+				border: 2px solid #aaa;
+				border-radius: 4px;
+				background-color: #262626;
+				color: #ccc;
+				font-family: 'Courier New', monospace;
+				font-size: 14px;
+				white-space: pre-wrap
+			}
+		</style>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const undoButton = document.getElementById('undo');
+				undoButton.addEventListener('click', undoAction);
+				const createButton = document.getElementById('create');
+				const deleteButton = document.getElementById('delete');
+				const actionHistory = [];
+				const apiUrl = 'https://raw.githubusercontent.com/Reik-RtS/rwdupdater/master/mooding.json';
+				const dragContainer = document.getElementsByClassName('drag-container')[0];
+				const canva = document.getElementById('canva');
+				const textArea = document.getElementById('text-area');
+				let selectedBlocks = [];
+				// Cargar datos desde la API web
+				fetch(apiUrl).then(response => response.json()).then(jsonData => {
+					// Crear bloques de c贸digo a partir de los datos JSON
+					jsonData.forEach(function(item) {
+						const codeBlock = document.createElement('li');
+						codeBlock.className = 'code-block';
+						codeBlock.draggable = true;
+						codeBlock.textContent = item.Code;
+						codeBlock.addEventListener('dragstart', function(e) {
+							e.dataTransfer.setData('text/plain', item.Code);
+						});
+						codeBlock.addEventListener('contextmenu', function(e) {
+							e.preventDefault();
+							const bubble = createBubble(item);
+							const mouseX = e.clientX;
+							const mouseY = e.clientY;
+							bubble.style.left = `${mouseX}px`;
+							bubble.style.top = `${mouseY}px`;
+							document.body.appendChild(bubble);
+						});
+						// Validar si el bloque contiene el texto "#===="
+						if (item.Code.includes('#====')) {
+							codeBlock.classList.add('disabled');
+							codeBlock.textContent = item.Description;
+							dragContainer.style.backgroundColor = 'gray';
+						}
+						dragContainer.appendChild(codeBlock);
+					});
+					// Calcular y establecer la altura del elemento "canva"
+					const dragContainerHeight = dragContainer.offsetHeight;
+					canva.style.height = dragContainerHeight + 'px';
+					init(); // Llamar a la funci贸n init
+				}).catch(error => console.error('Error al cargar los datos:', error));
+				// Función para detectar y ajustar los estilos si la altura es mayor que el ancho
+				function adjustMenuStyles() {
+					const windowHeight = window.innerHeight;
+					const windowWidth = window.innerWidth;
+					if (windowHeight > windowWidth) {
+						// La altura es mayor que el ancho, ajustar estilos del menú
+						const menu = document.querySelector('.mooding-toolbox');
+						menu.style.width = '20%'; // Cambiar el ancho del menú según tus necesidades
+					}
+				}
+				// Llamar a la función cuando se carga la página y cuando se cambia el tamaño de la ventana
+				window.addEventListener('DOMContentLoaded', adjustMenuStyles);
+				window.addEventListener('resize', adjustMenuStyles);
+				// Ajustar la altura del canva al cargar el JSON
+				window.addEventListener('load', function() {
+					const dragContainerHeight = dragContainer.offsetHeight;
+					canva.style.height = `calc(100% - ${dragContainerHeight + 20}px)`;
+				});
+				// Permitir soltar bloques de c贸digo en el canvas
+				canva.addEventListener('dragover', function(e) {
+					e.preventDefault();
+					this.classList.add('drag-over');
+				});
+				canva.addEventListener('dragleave', function() {
+					this.classList.remove('drag-over');
+				});
+				canva.addEventListener('drop', function(e) {
+					e.preventDefault();
+					this.classList.remove('drag-over');
+					const code = e.dataTransfer.getData('text/plain');
+					const block = createBlock(code);
+					this.appendChild(block);
+					checkBlockForText(block); // Comprobar si el bloque tiene ":"
+				});
+				// Crear burbuja
+				function createBubble(item) {
+					const bubble = document.createElement('div');
+					bubble.className = 'bubble';
+					let textContent = '';
+					if (item.Example && item.Example.trim() !== '--- Select here and press bar space ---') {
+						textContent = `${item.Example}`;
+					}
+					if (item.Added && item.Added.trim() !== '') {
+						textContent += ` ▼ Added: ${item.Added}`;
+					}
+					if (item.ValueType && item.ValueType.trim() !== '') {
+						if (textContent !== '') {
+							textContent += ' ';
+						}
+						textContent += ` ▼ ValueType: ${item.ValueType}`;
+					}
+					bubble.textContent = textContent;
+					// Ocultar la burbuja
+					setTimeout(() => {
+						bubble.remove();
+					}, 5000);
+					return bubble;
+				}
+				// Crear un elemento de bloque con conectores
+				let blockIdCounter = 0;
 
-        function createBlock(code) {
-          const block = document.createElement('li');
-          block.className = 'block';
-          const codeText = document.createElement('span');
-          codeText.textContent = code;
-          const input = document.createElement('input');
-          input.className = 'text-input';
-          input.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-              this.style.display = 'none';
-              const text = this.value;
-              codeText.textContent = code + text;
-            }
-          });
-          block.appendChild(codeText);
-          block.appendChild(input);
-          return block;
-          actionHistory.push({
-            type: 'create',
-            block: block.cloneNode(true)
-          });
-          block.id = `block-${blockIdCounter++}`;
-          block.draggable = true;
-          block.addEventListener('dragstart', function(e) {
-            e.dataTransfer.setData('text/plain', this.id);
-          });
-          return block;
-        }
-        // Comprobar si el bloque contiene el car谩cter ":"
-        function checkBlockForText(block) {
-          const codeText = block.querySelector('span');
-          if (codeText.textContent.includes(':')) {
-            block.classList.add('show-input');
-            const input = block.querySelector('.text-input');
-            input.style.display = 'block';
-          }
-        }
-        // Evento de clic en el bot贸n "Create Code"
-        createButton.addEventListener('click', function(e) {
-          e.preventDefault();
-          const blocks = canva.querySelectorAll('.block');
-          let code = '';
-          blocks.forEach(function(block) {
-            const codeText = block.querySelector('span');
-            const textContent = codeText.textContent;
-            if (textContent.includes('[')) {
-              // Agregar dos saltos de l铆nea para separar los p谩rrafos
-              code += '\n\n' + textContent + '\n';
-            } else {
-              if (textContent.includes(':')) {
-                code += textContent + ' ';
-              } else {
-                code += textContent + '\n';
-              }
-            }
-            // Agregar el contenido del cuadro de texto al c贸digo
-            const input = block.querySelector('.text-input');
-            if (input.style.display !== 'none') {
-              const text = input.value;
-              code += text + '\n';
-            }
-          });
-          textArea.value = code;
-          actionHistory.push({
-            type: 'create',
-            code: code
-          }); // Guardar la acci贸n en el historial
-          undoButton.style.display = 'block';
-          // Desplazar la p谩gina hasta el final
-          window.scrollTo(0, document.body.scrollHeight);
-          undoButton.style.display = 'block'; // Mostrar el bot贸n "Undo"
-        });
-        // Evento de clic en el bot贸n "Delete"
-        deleteButton.addEventListener('click', function(e) {
-          e.preventDefault();
-          selectedBlocks.forEach(function(block) {
-            block.remove();
-          });
-          selectedBlocks = [];
-          deleteButton.style.display = 'none';
-        });
-        // Eventos de clic y mantener presionado en un bloque
-        canva.addEventListener('mousedown', function(e) {
-          const target = e.target;
-          if (!target.classList.contains('block')) {
-            selectedBlocks.forEach(function(block) {
-              block.classList.remove('selected');
-            });
-            selectedBlocks = [];
-            deleteButton.style.display = 'none';
-          }
-        });
-        canva.addEventListener('mouseup', function(e) {
-          const target = e.target;
-          if (target.classList.contains('block')) {
-            target.classList.remove('selected');
-          }
-          if (selectedBlocks.length > 0) {
-            deleteButton.style.display = 'block';
-          }
-        });
-        // Deshabilitar el men煤 contextual para el canva
-        canva.addEventListener('contextmenu', function(e) {
-          e.preventDefault();
-          if (e.button === 2) {
-            const target = e.target;
-            if (target.classList.contains('block')) {
-              target.classList.add('selected');
-              selectedBlocks.push(target);
-            }
-            deleteButton.style.display = 'block';
-          } else {
-            deleteButton.style.display = 'none';
-            selectedBlocks = [];
-          }
-        });
-        undoButton.addEventListener('click', undoAction);
-        createButton.addEventListener('click', createCode);
-        deleteButton.addEventListener('click', deleteSelectedBlocks);
-        // Obtener referencia al campo de texto
-        const editText = document.getElementById('text-area');
-        // Obtener la caja de bloques del JSON (asumiendo que ya tienes una referencia a ella)
-        const jsonBlockBox = document.getElementById('drag-container');
-        // Función para aplicar estilos a las palabras en el campo de texto
-        function applyStylesToWords() {
-          const words = editText.value.split(' ');
-          const otherWords = ['true', 'false', 'if', 'and', 'or', 'not', '<', '>', '<=', '>=', '==', '!=', '+', '-', '/', '*', '%'];
-          const styledWords = words.map(word => {
-            // Comprobar si la palabra está en la caja de bloques del JSON
-            if (jsonBlockBox.textContent.includes(word)) {
-              return `
+				function createBlock(code) {
+					const block = document.createElement('li');
+					block.className = 'block';
+					const codeText = document.createElement('span');
+					codeText.textContent = code;
+					const input = document.createElement('input');
+					input.className = 'text-input';
+					input.addEventListener('keyup', function(e) {
+						if (e.key === 'Enter') {
+							this.style.display = 'none';
+							const text = this.value;
+							codeText.textContent = code + text;
+						}
+					});
+					block.appendChild(codeText);
+					block.appendChild(input);
+					return block;
+					actionHistory.push({
+						type: 'create',
+						block: block.cloneNode(true)
+					});
+					block.id = `block-${blockIdCounter++}`;
+					block.draggable = true;
+					block.addEventListener('dragstart', function(e) {
+						e.dataTransfer.setData('text/plain', this.id);
+					});
+					return block;
+				}
+				// Comprobar si el bloque contiene el car谩cter ":"
+				function checkBlockForText(block) {
+					const codeText = block.querySelector('span');
+					if (codeText.textContent.includes(':')) {
+						block.classList.add('show-input');
+						const input = block.querySelector('.text-input');
+						input.style.display = 'block';
+					}
+				}
+				// Evento de clic en el bot贸n "Create Code"
+				createButton.addEventListener('click', function(e) {
+					e.preventDefault();
+					const blocks = canva.querySelectorAll('.block');
+					let code = '';
+					blocks.forEach(function(block) {
+						const codeText = block.querySelector('span');
+						const textContent = codeText.textContent;
+						if (textContent.includes('[')) {
+							// Agregar dos saltos de l铆nea para separar los p谩rrafos
+							code += '\n\n' + textContent + '\n';
+						} else {
+							if (textContent.includes(':')) {
+								code += textContent + ' ';
+							} else {
+								code += textContent + '\n';
+							}
+						}
+						// Agregar el contenido del cuadro de texto al c贸digo
+						const input = block.querySelector('.text-input');
+						if (input.style.display !== 'none') {
+							const text = input.value;
+							code += text + '\n';
+						}
+					});
+					textArea.value = code;
+					actionHistory.push({
+						type: 'create',
+						code: code
+					}); // Guardar la acci贸n en el historial
+					undoButton.style.display = 'block';
+					// Desplazar la p谩gina hasta el final
+					window.scrollTo(0, document.body.scrollHeight);
+					undoButton.style.display = 'block'; // Mostrar el bot贸n "Undo"
+				});
+				// Evento de clic en el bot贸n "Delete"
+				deleteButton.addEventListener('click', function(e) {
+					e.preventDefault();
+					selectedBlocks.forEach(function(block) {
+						block.remove();
+					});
+					selectedBlocks = [];
+					deleteButton.style.display = 'none';
+				});
+				// Eventos de clic y mantener presionado en un bloque
+				canva.addEventListener('mousedown', function(e) {
+					const target = e.target;
+					if (!target.classList.contains('block')) {
+						selectedBlocks.forEach(function(block) {
+							block.classList.remove('selected');
+						});
+						selectedBlocks = [];
+						deleteButton.style.display = 'none';
+					}
+				});
+				canva.addEventListener('mouseup', function(e) {
+					const target = e.target;
+					if (target.classList.contains('block')) {
+						target.classList.remove('selected');
+					}
+					if (selectedBlocks.length > 0) {
+						deleteButton.style.display = 'block';
+					}
+				});
+				// Deshabilitar el men煤 contextual para el canva
+				canva.addEventListener('contextmenu', function(e) {
+					e.preventDefault();
+					if (e.button === 2) {
+						const target = e.target;
+						if (target.classList.contains('block')) {
+							target.classList.add('selected');
+							selectedBlocks.push(target);
+						}
+						deleteButton.style.display = 'block';
+					} else {
+						deleteButton.style.display = 'none';
+						selectedBlocks = [];
+					}
+				});
+				undoButton.addEventListener('click', undoAction);
+				createButton.addEventListener('click', createCode);
+				deleteButton.addEventListener('click', deleteSelectedBlocks);
+				// Obtener referencia al campo de texto
+				const editText = document.getElementById('text-area');
+				// Obtener la caja de bloques del JSON (asumiendo que ya tienes una referencia a ella)
+				const jsonBlockBox = document.getElementById('drag-container');
+				// Función para aplicar estilos a las palabras en el campo de texto
+				function applyStylesToWords() {
+					const words = editText.value.split(' ');
+					const otherWords = ['true', 'false', 'if', 'and', 'or', 'not', '<', '>', '<=', '>=', '==', '!=', '+', '-', '/', '*', '%'];
+					const styledWords = words.map(word => {
+						// Comprobar si la palabra está en la caja de bloques del JSON
+						if (jsonBlockBox.textContent.includes(word)) {
+							return `
 				
-				<span style="color: #9f56a5">${word}</span>`;
-            }
-            // Comprobar si la palabra contiene el carácter ":"
-            if (word.includes(':')) {
-              return `
 				
-				<span style="color: #fe0000">${word}</span>`;
-            }
-            // Comprobar si la palabra tiene al inicio "[" y al final "]"
-            if (word.startsWith('[') && word.endsWith(']')) {
-              return `
+			
+			<span style="color: #9f56a5">${word}</span>`;
+						}
+						// Comprobar si la palabra contiene el carácter ":"
+						if (word.includes(':')) {
+							return `
 				
-				<span style="color: #ffa420">${word}</span>`;
-            }
-            // Comprobar si la palabra es un número
-            if (!isNaN(word)) {
-              return `
 				
-				<span style="color: lightgreen">${word}</span>`;
-            }
-            // Comprobar si la palabra es un número seguido de una 's'
-            if (!isNaN(word) && word.endsWith('s')) {
-              return `
+			
+			<span style="color: #fe0000">${word}</span>`;
+						}
+						// Comprobar si la palabra tiene al inicio "[" y al final "]"
+						if (word.startsWith('[') && word.endsWith(']')) {
+							return `
 				
-				<span style="color: lightgreen">${word}</span>`;
-            }
-            // Comprobar si la palabra está en otherWords
-            if (otherWords.includes(word)) {
-              return `
 				
-				<span style="color: #bcb6ff">${word}</span>`;
-            }
-            return word; // Mantener la palabra sin cambios
-          });
-          editText.innerHTML = styledWords.join(' ');
-        }
-        // Escuchar el evento de cambio de contenido en el campo de texto
-        editText.addEventListener('input', applyStylesToWords);
-      });
+			
+			<span style="color: #ffa420">${word}</span>`;
+						}
+						// Comprobar si la palabra es un número
+						if (!isNaN(word)) {
+							return `
+				
+				
+			
+			<span style="color: lightgreen">${word}</span>`;
+						}
+						// Comprobar si la palabra es un número seguido de una 's'
+						if (!isNaN(word) && word.endsWith('s')) {
+							return `
+				
+				
+			
+			<span style="color: lightgreen">${word}</span>`;
+						}
+						// Comprobar si la palabra está en otherWords
+						if (otherWords.includes(word)) {
+							return `
+				
+				
+			
+			<span style="color: #bcb6ff">${word}</span>`;
+						}
+						return word; // Mantener la palabra sin cambios
+					});
+					editText.innerHTML = styledWords.join(' ');
+				}
+				// Escuchar el evento de cambio de contenido en el campo de texto
+				editText.addEventListener('input', applyStylesToWords);
+			});
 
-      function undoAction() {
-        if (actionHistory.length > 0) {
-          const lastAction = actionHistory.pop();
-          if (lastAction.type === 'create') {
-            const codeLines = lastAction.code.trim().split('\n');
-            const blocks = canva.querySelectorAll('.block');
-            for (let i = blocks.length - 1; i >= 0; i--) {
-              const block = blocks[i];
-              const codeText = block.querySelector('span');
-              if (codeText.textContent === codeLines[0]) {
-                block.remove();
-                codeLines.shift();
-                if (codeLines.length === 0) break;
-              }
-            }
-          }
-        }
-      }
+			function undoAction() {
+				if (actionHistory.length > 0) {
+					const lastAction = actionHistory.pop();
+					if (lastAction.type === 'create') {
+						const codeLines = lastAction.code.trim().split('\n');
+						const blocks = canva.querySelectorAll('.block');
+						for (let i = blocks.length - 1; i >= 0; i--) {
+							const block = blocks[i];
+							const codeText = block.querySelector('span');
+							if (codeText.textContent === codeLines[0]) {
+								block.remove();
+								codeLines.shift();
+								if (codeLines.length === 0) break;
+							}
+						}
+					}
+				}
+			}
 
-      function createCode() {
-        const blocks = canva.querySelectorAll('.block');
-        let code = '';
-        blocks.forEach(function(block) {
-          const codeText = block.querySelector('span');
-          const textContent = codeText.textContent;
-          if (textContent.includes('[')) {
-            code += textContent.replace('[', '\n\n[') + '\n\n';
-          } else {
-            code += textContent + '\n';
-          }
-        });
-        textArea.value = code;
-        actionHistory.push({
-          type: 'create',
-          code: code
-        });
-        undoButton.style.display = 'block';
-        window.scrollTo(0, document.body.scrollHeight);
-      }
+			function createCode() {
+				const blocks = canva.querySelectorAll('.block');
+				let code = '';
+				blocks.forEach(function(block) {
+					const codeText = block.querySelector('span');
+					const textContent = codeText.textContent;
+					if (textContent.includes('[')) {
+						code += textContent.replace('[', '\n\n[') + '\n\n';
+					} else {
+						code += textContent + '\n';
+					}
+				});
+				textArea.value = code;
+				actionHistory.push({
+					type: 'create',
+					code: code
+				});
+				undoButton.style.display = 'block';
+				window.scrollTo(0, document.body.scrollHeight);
+			}
 
-      function deleteSelectedBlocks() {
-        selectedBlocks.forEach(function(block) {
-          block.remove();
-        });
-        selectedBlocks = [];
-        deleteButton.style.display = 'none';
-      }
+			function deleteSelectedBlocks() {
+				selectedBlocks.forEach(function(block) {
+					block.remove();
+				});
+				selectedBlocks = [];
+				deleteButton.style.display = 'none';
+			}
 
-      function init() {
-        canva.addEventListener('click', function(e) {
-          const target = e.target;
-          if (!target.classList.contains('block')) {
-            // Si el clic no se realiz贸 dentro de un bloque, deselecciona todos los bloques seleccionados
-            selectedBlocks.forEach(function(block) {
-              block.classList.remove('selected');
-            });
-            selectedBlocks = [];
-            deleteButton.style.display = 'none';
-          }
-        });
-        canva.addEventListener('click', function(e) {
-          const target = e.target;
-          if (target.classList.contains('block')) {
-            // Verificar si el bloque est谩 seleccionado
-            if (target.classList.contains('selected')) {
-              // Restaurar el color original del bloque
-              target.style.backgroundColor = '#ccc';
-              // Deseleccionar el bloque
-              target.classList.remove('selected');
-              // Ocultar el bot贸n de borrar si no hay bloques seleccionados
-              if (selectedBlocks.length === 0) {
-                deleteButton.style.display = 'none';
-              }
-            } else {
-              // Si el clic no se realiz贸 dentro de un bloque, deselecciona todos los bloques seleccionados
-              selectedBlocks.forEach(function(block) {
-                block.classList.remove('selected');
-              });
-              selectedBlocks = [];
-              deleteButton.style.display = 'none';
-            }
-          }
-        });
-        canva.addEventListener('dragover', function(e) {
-          e.preventDefault();
-          const draggingBlock = document.getElementById(e.dataTransfer.getData('text/plain'));
-          const closestBlock = getClosestBlock(e.clientY);
-          if (closestBlock) {
-            if (closestBlock !== draggingBlock.nextSibling) {
-              this.insertBefore(draggingBlock, closestBlock.nextSibling);
-            }
-          } else {
-            this.appendChild(draggingBlock);
-          }
-        });
-        canva.addEventListener('drop', function(e) {
-          e.preventDefault();
-          const draggingBlock = document.getElementById(e.dataTransfer.getData('text/plain'));
-          const closestBlock = getClosestBlock(e.clientY);
-          if (closestBlock) {
-            if (closestBlock !== draggingBlock.nextSibling) {
-              this.insertBefore(draggingBlock, closestBlock.nextSibling);
-            }
-          } else {
-            this.appendChild(draggingBlock);
-          }
-        });
+			function init() {
+				canva.addEventListener('click', function(e) {
+					const target = e.target;
+					if (!target.classList.contains('block')) {
+						// Si el clic no se realiz贸 dentro de un bloque, deselecciona todos los bloques seleccionados
+						selectedBlocks.forEach(function(block) {
+							block.classList.remove('selected');
+						});
+						selectedBlocks = [];
+						deleteButton.style.display = 'none';
+					}
+				});
+				canva.addEventListener('click', function(e) {
+					const target = e.target;
+					if (target.classList.contains('block')) {
+						// Verificar si el bloque est谩 seleccionado
+						if (target.classList.contains('selected')) {
+							// Restaurar el color original del bloque
+							target.style.backgroundColor = '#ccc';
+							// Deseleccionar el bloque
+							target.classList.remove('selected');
+							// Ocultar el bot贸n de borrar si no hay bloques seleccionados
+							if (selectedBlocks.length === 0) {
+								deleteButton.style.display = 'none';
+							}
+						} else {
+							// Si el clic no se realiz贸 dentro de un bloque, deselecciona todos los bloques seleccionados
+							selectedBlocks.forEach(function(block) {
+								block.classList.remove('selected');
+							});
+							selectedBlocks = [];
+							deleteButton.style.display = 'none';
+						}
+					}
+				});
+				canva.addEventListener('dragover', function(e) {
+					e.preventDefault();
+					const draggingBlock = document.getElementById(e.dataTransfer.getData('text/plain'));
+					const closestBlock = getClosestBlock(e.clientY);
+					if (closestBlock) {
+						if (closestBlock !== draggingBlock.nextSibling) {
+							this.insertBefore(draggingBlock, closestBlock.nextSibling);
+						}
+					} else {
+						this.appendChild(draggingBlock);
+					}
+				});
+				canva.addEventListener('drop', function(e) {
+					e.preventDefault();
+					const draggingBlock = document.getElementById(e.dataTransfer.getData('text/plain'));
+					const closestBlock = getClosestBlock(e.clientY);
+					if (closestBlock) {
+						if (closestBlock !== draggingBlock.nextSibling) {
+							this.insertBefore(draggingBlock, closestBlock.nextSibling);
+						}
+					} else {
+						this.appendChild(draggingBlock);
+					}
+				});
 
-        function getClosestBlock(y) {
-          const blocks = canva.getElementsByClassName('block');
-          let closestBlock = null;
-          let minDistance = Infinity;
-          for (let i = 0; i < blocks.length; i++) {
-            const block = blocks[i];
-            const rect = block.getBoundingClientRect();
-            const distance = Math.abs(rect.top - y);
-            if (distance < minDistance) {
-              closestBlock = block;
-              minDistance = distance;
-            }
-          }
-          return closestBlock;
-        }
-      }
-      $(function() {
-        $("#canva").sortable({
-          placeholder: "block_highlight"
-        });
-      });
-    </script>
-  </head>
-  <body>
-    <h1>Mooding Reference BETA</h1>
-    <div class="mooding-toolbox">
-      <div class="mooding-toolbox-category">
-        <div class="mooding-toolbox-title">Blocks</div>
-      </div>
-      <ul id="jsonBlocks" class="drag-container"></ul>
-    </div>
-    <ul id="canva"></ul>
-    <textarea id="text-area" class="text-area"></textarea>
-    <button id="undo" class="undo-button">Undo</button>
-    <button id="create" class="create-button">Create Code</button>
-    <button id="delete" class="btn-delete">Delete</button>
-  </body>
+				function getClosestBlock(y) {
+					const blocks = canva.getElementsByClassName('block');
+					let closestBlock = null;
+					let minDistance = Infinity;
+					for (let i = 0; i < blocks.length; i++) {
+						const block = blocks[i];
+						const rect = block.getBoundingClientRect();
+						const distance = Math.abs(rect.top - y);
+						if (distance < minDistance) {
+							closestBlock = block;
+							minDistance = distance;
+						}
+					}
+					return closestBlock;
+				}
+			}
+			$(function() {
+				$("#canva").sortable({
+					placeholder: "block_highlight"
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Mooding Reference BETA</h1>
+		<div class="mooding-toolbox">
+			<div class="mooding-toolbox-category">
+				<div class="mooding-toolbox-title">Blocks</div>
+			</div>
+			<ul id="jsonBlocks" class="drag-container"></ul>
+		</div>
+		<ul id="canva"></ul>
+		<textarea id="text-area" class="text-area"></textarea>
+		<button id="undo" class="undo-button">Undo</button>
+		<button id="create" class="create-button">Create Code</button>
+		<button id="delete" class="btn-delete">Delete</button>
+	</body>
 </html>
